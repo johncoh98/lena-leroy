@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F5F5DC;       /* beige clair */
+  --foreground: #333333;       /* noir doux */
+
+  --accent: #F7E6E0;           /* rose poudré */
+  --accent-dark: #C9A9A6;      /* rose vintage */
+  --button-bg: #D6C7B0;       /* beige doré */
+  --button-hover: #C9A9A6;     /* rose vintage hover */
 }
 
 @theme inline {
@@ -22,5 +27,12 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+
+  background-image: url('/pattern-bg.png');
+  background-repeat: repeat;
+  background-size: contain;
+  background-attachment: fixed;
 }
+
+
