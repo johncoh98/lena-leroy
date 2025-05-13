@@ -1,17 +1,39 @@
 @import "tailwindcss";
 
-
+/* 🎨 Palette principale */
 :root {
-  --background: #f7f9fc;
-  --foreground: #2c2c2c;
-  --accent: #5c6bc0;
-  --accent-dark: #3f51b5;
-  --button-bg: #5c6bc0;
-  --button-hover: #3f51b5;
+  --primary: #D8C9E7;         
+  --secondary: #A3B3A1 ;         /* Vert sauge */
+  --background: #FBF9F5;        /* Beige clair */
+  --foreground: #2A2A2A;        /* Texte standard */
+  --accent: #B89BCF ;            /* Rose vieux - détails */
+  --button-bg: var(--secondary);      /* Vert pour les boutons */
+  --button-hover: #849C6E;      /* Vert légèrement plus foncé */
+}
+
+body {
+  background-color: #D8C9E7;
+  background-image: url('/bg.png');
+  background-repeat: repeat;
+  background-size: contain;
+  background-attachment: fixed;
 }
 
 
+/* 🌙 Dark mode (optionnel) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
 
+/* 🎭 Fonts personnalisées */
+.great-vibes {
+  font-family: 'Great Vibes', cursive;
+}
+
+/* 🧠 Theme Tailwind inline (si utilisé) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -19,46 +41,40 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-.great-vibes {
-  font-family: 'Great Vibes', cursive;
-}
 
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  background-image: url("/pattern-bg.png");
-  font-family: 'RoyalPolice', serif;
-  background-repeat: repeat;
-  background-size: contain;
-  background-attachment: fixed;
-}
-
-button, input, select, textarea {
+/* 🧩 Inputs + boutons */
+button,
+input,
+select,
+textarea {
   transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--secondary);
 }
 
+/* ✨ Hover effets */
 button:hover {
   transform: scale(1.03);
-  background-color: #5e6db3; /* Un bleu un peu plus foncé en hover */
+  background-color: var(--button-hover);
 }
 
+/* 📰 Typo */
 h1, h2, h3 {
-  letter-spacing: 1px;
-  font-weight: 600;
-  color: #2f2f2f;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--foreground);
 }
 
 p, label {
+    font-family: 'Playfair Display', serif;
+
   font-size: 1rem;
-  color: #444;
+  color: #2E2E2E ;
 }
+
+/* 🧾 Card blocks */
 .card {
   background-color: white;
   border-radius: 1rem;

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const GOOGLE_FORM_URL = "https://script.google.com/macros/s/AKfycbzMif7i3kH5Elrc1qpOVNRIeXLXCQTbSnxqi_MxVv_Yrq1FLt5S0Pr1hZcO9FmXecF2fQ/exec";
 
 export default function RSVPForm() {
   const [form, setForm] = useState({
-    fullName: '',
-    presenceSoiree: '',
-    guestsSoiree: '',
-    presenceMairie: '',
-    guestsMairie: '',
-    comment: '',
+    fullName: "",
+    presenceSoiree: "",
+    guestsSoiree: "",
+    presenceMairie: "",
+    guestsMairie: "",
+    comment: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -24,137 +24,77 @@ export default function RSVPForm() {
     e.preventDefault();
     try {
       const response = await fetch(GOOGLE_FORM_URL, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(form),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (response.ok) {
         setSubmitted(true);
       } else {
-        console.error('Erreur serveur', response);
-        alert('Une erreur est survenue. Merci de réessayer plus tard.');
+        alert("Une erreur est survenue. Merci de réessayer plus tard.");
       }
-    } catch (error) {
-      console.error('Erreur réseau', error);
-      alert('Une erreur est survenue. Merci de réessayer plus tard.');
+    } catch {
+      alert("Une erreur est survenue. Merci de réessayer plus tard.");
     }
   };
 
   return (
-    <section className="mb-16 max-w-2xl mx-auto text-center bg-[var(--primary)] border border-[var(--button-bg)] p-8 rounded-3xl shadow-lg">
-      <h3 className="text-3xl font-bold mb-8 text-[var(--foreground)]">Confirme ta présence</h3>
+    <section className="bg-white/80 text-[var(--foreground)] p-8 rounded-3xl shadow-lg border border-[var(--button-bg)] max-w-2xl mx-auto">
+      <h3 className="text-3xl font-bold mb-6 text-center">Confirme ta présence</h3>
 
       {submitted ? (
-        <p className="text-[var(--accent-dark)] text-lg font-semibold">Merci pour ta réponse 💌</p>
+        <p className="text-[var(--accent-dark)] text-center text-lg font-medium">Merci pour ta réponse 💌</p>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 text-left">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <TextInput label="Nom & Prénom" name="fullName" required onChange={handleChange} />
+          <SelectInput label="Viendras-tu à la soirée ?" name="presenceSoiree" required options={["Oui", "Non, avec regrets", "Pas encore sûr"]} onChange={handleChange} />
+          <TextInput label="Combien serez-vous pour la soirée ?" name="guestsSoiree" type="number" required onChange={handleChange} />
+          <SelectInput label="Viendras-tu à la mairie ?" name="presenceMairie" required options={["Oui", "Non, avec regrets", "Pas encore sûr"]} onChange={handleChange} />
+          <TextInput label="Combien serez-vous pour la mairie ?" name="guestsMairie" type="number" required onChange={handleChange} />
 
-          <Input label="Nom & Prénom" name="fullName" type="text" required onChange={handleChange} />
-
-          <Select
-            label="Viendras-tu à la soirée ?"
-            name="presenceSoiree"
-            options={["Oui", "Non, avec regrets", "Pas encore sûr"]}
-            required
-            onChange={handleChange}
-          />
-          <Input label="Combien serez-vous pour la soirée ?" name="guestsSoiree" type="number" required onChange={handleChange} />
-
-          <Select
-            label="Viendras-tu à la mairie ?"
-            name="presenceMairie"
-            options={["Oui", "Non, avec regrets", "Pas encore sûr"]}
-            required
-            onChange={handleChange}
-          />
-          <Input label="Combien serez-vous pour la mairie ?" name="guestsMairie" type="number" required onChange={handleChange} />
-
-          <div className="flex flex-col">
-            <label htmlFor="comment" className="text-sm font-medium text-[var(--foreground)] mb-1">
-              Message pour les mariés (optionnel)
-            </label>
-            <textarea
-              name="comment"
-              rows={4}
-              placeholder="Un petit mot doux 💌"
-              className="p-3 border border-[var(--button-bg)] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
-              onChange={handleChange}
-            />
+          <div>
+            <label htmlFor="comment" className="block mb-1 text-sm font-medium">Message pour les mariés (optionnel)</label>
+            <textarea name="comment" rows={3} className="w-full p-3 rounded-xl border border-[var(--button-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]" onChange={handleChange} />
           </div>
 
-          <button
-            type="submit"
-            className="mt-6 bg-[var(--button-bg)] hover:bg-[var(--button-hover)] text-white font-semibold py-3 px-8 rounded-full transition-all shadow-md"
-          >
-            💌 Envoyer
-          </button>
+          <button type="submit" className="w-full bg-[var(--button-bg)] hover:bg-[var(--button-hover)] text-white font-semibold py-3 px-6 rounded-full transition shadow">💌 Envoyer</button>
         </form>
       )}
     </section>
   );
 }
 
-function Input({
-  label,
-  name,
-  type,
-  required,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  type: string;
-  required?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
+function TextInput({ label, name, type = "text", required = false, onChange }: any) {
   return (
-    <div className="flex flex-col">
-      <label htmlFor={name} className="text-sm font-medium text-[var(--foreground)] mb-1">
-        {label}
-      </label>
+    <div>
+      <label htmlFor={name} className="block mb-1 text-sm font-medium">{label}</label>
       <input
-        name={name}
         type={type}
+        name={name}
         required={required}
-        className="p-3 border border-[var(--button-bg)] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
         onChange={onChange}
+        className="w-full p-3 rounded-xl border border-[var(--button-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
       />
     </div>
   );
 }
 
-function Select({
-  label,
-  name,
-  options,
-  required,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  options: string[];
-  required?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}) {
+function SelectInput({ label, name, options, required = false, onChange }: any) {
   return (
-    <div className="flex flex-col">
-      <label htmlFor={name} className="text-sm font-medium text-[var(--foreground)] mb-1">
-        {label}
-      </label>
+    <div>
+      <label htmlFor={name} className="block mb-1 text-sm font-medium">{label}</label>
       <select
         name={name}
         required={required}
-        className="p-3 border border-[var(--button-bg)] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
         onChange={onChange}
+        className="w-full p-3 rounded-xl border border-[var(--button-bg)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
       >
         <option value="">Choisir une option</option>
-        {options.map((option) => (
-          <option key={option} value={option.toLowerCase()}>
-            {option}
-          </option>
+        {options.map((opt: string) => (
+          <option key={opt} value={opt.toLowerCase()}>{opt}</option>
         ))}
       </select>
     </div>
