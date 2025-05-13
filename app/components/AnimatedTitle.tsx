@@ -2,11 +2,16 @@
 
 import { motion } from 'framer-motion';
 
-export default function AnimatedTitle({ text }: { text: string }) {
+interface AnimatedTitleProps {
+  text: string;
+  className?: string;
+}
+
+export default function AnimatedTitle({ text, className = "text-4xl md:text-6xl font-bold text-center text-[var(--foreground)]" }: AnimatedTitleProps) {
   const letters = text.split('');
 
   return (
-    <h1 className="text-4xl md:text-6xl font-bold text-center text-[var(--foreground)]">
+    <h1 className={className}>
       {letters.map((char, i) => (
         <motion.span
           key={i}

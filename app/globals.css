@@ -1,24 +1,29 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
-/* 🎨 Palette principale */
+/* 🎨 Palette principale - Tons de Lavande et Or */
 :root {
-  --primary: #D8C9E7;         
-  --secondary: #A3B3A1 ;         /* Vert sauge */
-  --background: #FBF9F5;        /* Beige clair */
-  --foreground: #2A2A2A;        /* Texte standard */
-  --accent: #B89BCF ;            /* Rose vieux - détails */
-  --button-bg: var(--secondary);      /* Vert pour les boutons */
-  --button-hover: #849C6E;      /* Vert légèrement plus foncé */
+  --primary: #f8f6ff;
+  --secondary: #9d8ec7;
+  --background: #fbf9ff;
+  --foreground: #352f44;
+  --accent: #6c5b7b;
+  --gold: #d4af37;
+  --gold-light: #f4e4bc;
+  --button-bg: #9d8ec7;
+  --button-hover: #6c5b7b;
 }
 
 body {
-  background-color: #D8C9E7;
+  background-color: var(--primary);
   background-image: url('/bg.png');
   background-repeat: repeat;
   background-size: contain;
   background-attachment: fixed;
+  font-family: 'Lora', serif;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
 }
-
 
 /* 🌙 Dark mode (optionnel) */
 @media (prefers-color-scheme: dark) {
@@ -61,17 +66,43 @@ button:hover {
 
 /* 📰 Typo */
 h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  color: var(--foreground);
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+p {
+  font-family: 'Lora', serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
   color: var(--foreground);
 }
 
-p, label {
-    font-family: 'Playfair Display', serif;
-
-  font-size: 1rem;
-  color: #2E2E2E ;
+.text-accent {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  color: var(--secondary);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
 }
 
 /* 🧾 Card blocks */
@@ -85,4 +116,301 @@ p, label {
 
 .card:hover {
   transform: translateY(-5px);
+}
+
+.bg-sides {
+  background-image: url('/floral-side.png'), url('/floral-side.png');
+  background-position: left center, right center;
+  background-repeat: repeat-y;
+  background-size: 150px auto;
+  background-color: var(--primary);
+}
+
+.ornamental-border {
+  position: relative;
+}
+
+.ornamental-border::before,
+.ornamental-border::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-image: url('/ornament.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  border: 1px solid var(--gold-light);
+}
+
+.ornamental-border::before {
+  top: -25px;
+  left: -25px;
+  transform: rotate(-90deg);
+}
+
+.ornamental-border::after {
+  bottom: -25px;
+  right: -25px;
+  transform: rotate(90deg);
+}
+
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 1px rgba(0,0,0,0.1);
+  letter-spacing: 0.08em;
+}
+
+.shine-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(157, 142, 199, 0) 0%,
+    rgba(157, 142, 199, 0.2) 50%,
+    rgba(157, 142, 199, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shine 6s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.elegant-shadow {
+  box-shadow: 0 4px 30px rgba(157, 142, 199, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(157, 142, 199, 0.1);
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fancy-divider {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+}
+
+.fancy-divider::before,
+.fancy-divider::after {
+  font-family: 'Bodoni Moda', serif;
+  content: '✦';
+  font-size: 1.5rem;
+  color: var(--gold);
+}
+
+.fancy-divider::before {
+  left: 30%;
+}
+
+.fancy-divider::after {
+  right: 30%;
+}
+
+/* Styles typographiques élégants */
+.title-script {
+  font-family: 'Great Vibes', cursive;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title-formal {
+  font-family: 'Petit Formal Script', cursive;
+}
+
+.title-elegant {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+
+.text-elegant {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.8;
+}
+
+/* Styles des citations */
+blockquote {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 1.75rem;
+  line-height: 1.6;
+  color: var(--accent);
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  position: relative;
+  letter-spacing: 0.05em;
+}
+
+blockquote::before,
+blockquote::after {
+  content: '❦';
+  font-family: 'Bodoni Moda', serif;
+  font-size: 2.5rem;
+  color: var(--gold);
+  opacity: 0.5;
+  position: absolute;
+}
+
+blockquote::before {
+  top: -1.5rem;
+  left: -1rem;
+}
+
+blockquote::after {
+  bottom: -1.5rem;
+  right: -1rem;
+  transform: rotate(180deg);
+}
+
+/* Animation de texte élégante */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Styles typographiques royaux */
+.title-royal {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 1.3;
+}
+
+.text-refined {
+  font-family: 'Cormorant', serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+}
+
+.text-classic {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.8;
+}
+
+/* Effets de survol */
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Styles pour le contrôle audio */
+.audio-control {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 50;
+  background: rgba(248, 246, 255, 0.9);
+  border: 1px solid var(--gold);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.audio-control:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 25px rgba(212, 175, 55, 0.25);
+}
+
+.audio-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--gold);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.audio-icon:hover {
+  color: var(--accent);
+}
+
+/* Ajout d'accents dorés */
+.gold-accent {
+  color: var(--gold);
+}
+
+.gold-border {
+  border-color: var(--gold);
+}
+
+.gold-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.2) 50%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+/* Animation de pulsation dorée */
+@keyframes goldPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}
+
+.pulse-gold {
+  animation: goldPulse 2s infinite;
 }

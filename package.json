@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@fontsource/great-vibes": "^5.2.5",
-    "framer-motion": "^12.8.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "framer-motion": "^12.11.0",
     "next": "^15.3.1",
     "react": "^19.1.0",
+    "react-audio-player": "^0.17.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.3",
     "react-type-animation": "^3.2.0"
   },
   "devDependencies": {
