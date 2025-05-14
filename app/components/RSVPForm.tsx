@@ -52,15 +52,20 @@ export default function RSVPForm() {
   };
 
   return (
-    <section className="bg-white/80 text-[var(--foreground)] p-8 rounded-3xl shadow-lg border border-[var(--button-bg)] max-w-2xl mx-auto">
-      <h3 className="text-3xl font-bold mb-6 text-center">Confirme ta présence</h3>
+    <div className="invitation-container p-12 rounded-lg max-w-3xl mx-auto">
+      <h2 className="title-royal text-3xl text-center mb-12">
+        <span className="text-accent">C</span>onfirme ta présence
+      </h2>
 
       {submitted ? (
-        <p className="text-[var(--accent-dark)] text-center text-lg font-medium">
-          Merci pour ta réponse 💌
-        </p>
+        <div className="text-center space-y-4">
+          <p className="text-refined text-xl">
+            Merci pour ta réponse
+          </p>
+          <p className="text-accent text-2xl">✦</p>
+        </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-8">
           <TextInput label="Nom & Prénom" name="fullName" required onChange={handleChange} />
           <SelectInput
             label="Viendras-tu à la soirée ?"
@@ -90,26 +95,26 @@ export default function RSVPForm() {
             required
             onChange={handleChange}
           />
-          <div>
-            <label htmlFor="comment" className="block mb-1 text-sm font-medium">
+          <div className="space-y-2">
+            <label htmlFor="comment" className="block text-refined">
               Message pour les mariés (optionnel)
             </label>
             <textarea
               name="comment"
               rows={3}
-              className="w-full p-3 rounded-xl border border-[var(--button-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
+              className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-4 text-refined focus:outline-none focus:border-[var(--accent)]/40 transition-colors"
               onChange={handleChange}
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-[var(--button-bg)] hover:bg-[var(--button-hover)] text-white font-semibold py-3 px-6 rounded-full transition shadow"
+            className="w-full bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.2)] border border-[var(--accent)]/20 text-accent py-4 px-8 rounded-lg transition-all duration-300 text-refined hover:border-[var(--accent)]/40"
           >
-            💌 Envoyer
+            Envoyer ma réponse
           </button>
         </form>
       )}
-    </section>
+    </div>
   );
 }
 
@@ -123,8 +128,8 @@ type TextInputProps = {
 
 function TextInput({ label, name, type = 'text', required = false, onChange }: TextInputProps) {
   return (
-    <div>
-      <label htmlFor={name} className="block mb-1 text-sm font-medium">
+    <div className="space-y-2">
+      <label htmlFor={name} className="block text-refined">
         {label}
       </label>
       <input
@@ -132,7 +137,7 @@ function TextInput({ label, name, type = 'text', required = false, onChange }: T
         name={name}
         required={required}
         onChange={onChange}
-        className="w-full p-3 rounded-xl border border-[var(--button-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
+        className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-4 text-refined focus:outline-none focus:border-[var(--accent)]/40 transition-colors"
       />
     </div>
   );
@@ -148,15 +153,15 @@ type SelectInputProps = {
 
 function SelectInput({ label, name, options, required = false, onChange }: SelectInputProps) {
   return (
-    <div>
-      <label htmlFor={name} className="block mb-1 text-sm font-medium">
+    <div className="space-y-2">
+      <label htmlFor={name} className="block text-refined">
         {label}
       </label>
       <select
         name={name}
         required={required}
         onChange={onChange}
-        className="w-full p-3 rounded-xl border border-[var(--button-bg)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--button-hover)]"
+        className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-4 text-refined focus:outline-none focus:border-[var(--accent)]/40 transition-colors appearance-none"
       >
         <option value="">Choisir une option</option>
         {options.map((opt) => (

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 
-const weddingDate = new Date("2025-09-04T16:00:00+02:00");
+const weddingDate = new Date("2025-09-04T15:00:00+02:00");
 
 export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
@@ -28,9 +28,11 @@ export default function Countdown() {
   }
 
   return (
-    <div className="bg-white/80 border border-[var(--button-bg)] p-6 rounded-3xl shadow-xl text-center max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Le mariage aura lieu dans :</h2>
-      <div className="flex justify-center gap-4 text-[var(--foreground)]">
+    <div className="invitation-container p-12 rounded-lg text-center max-w-3xl mx-auto">
+      <h2 className="title-royal text-3xl mb-12">
+        <span className="text-accent">L</span>e grand jour approche
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
         <TimeBox label="Jours" value={timeLeft.days} />
         <TimeBox label="Heures" value={timeLeft.hours} />
         <TimeBox label="Minutes" value={timeLeft.minutes} />
@@ -42,9 +44,13 @@ export default function Countdown() {
 
 function TimeBox({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-[var(--secondary)] text-white px-4 py-2 rounded-xl w-20 shadow-md">
-      <div className="text-3xl font-bold">{value.toString().padStart(2, "0")}</div>
-      <div className="text-sm mt-1">{label}</div>
+    <div className="flex flex-col items-center space-y-2">
+      <div className="bg-[rgba(212,175,55,0.1)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-4 w-full aspect-square flex items-center justify-center">
+        <div className="text-4xl md:text-5xl text-accent font-light">
+          {value.toString().padStart(2, "0")}
+        </div>
+      </div>
+      <div className="text-refined">{label}</div>
     </div>
   );
 }

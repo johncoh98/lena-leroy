@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="200" viewBox="0 0 800 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.2">
+    <path d="M400 0C400 0 350 50 300 100C250 150 200 180 200 180M400 0C400 0 450 50 500 100C550 150 600 180 600 180" stroke="#8B7355" stroke-width="1"/>
+    <path d="M350 20C350 20 320 60 300 90C280 120 250 160 250 160M450 20C450 20 480 60 500 90C520 120 550 160 550 160" stroke="#8B7355" stroke-width="1"/>
+    <path d="M375 40C375 40 355 70 345 90C335 110 320 140 320 140M425 40C425 40 445 70 455 90C465 110 480 140 480 140" stroke="#8B7355" stroke-width="1"/>
+  </g>
+</svg> 
