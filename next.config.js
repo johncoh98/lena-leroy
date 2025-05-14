@@ -1,7 +1,11 @@
 // next.config.js
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // swcMinify: true, // ❌ Supprimé car non snupporté
+  images: {
+    domains: [],
+    unoptimized: true,
+  }
 }
 
 module.exports = nextConfig
