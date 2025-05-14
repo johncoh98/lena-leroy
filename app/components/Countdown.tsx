@@ -28,11 +28,11 @@ export default function Countdown() {
   }
 
   return (
-    <div className="invitation-container p-12 rounded-lg text-center max-w-3xl mx-auto">
-      <h2 className="title-royal text-3xl mb-12">
+    <div className="invitation-container p-6 md:p-12 rounded-lg text-center max-w-3xl mx-auto">
+      <h2 className="title-royal text-xl md:text-3xl mb-8 md:mb-12">
         <span className="text-accent">L</span>e grand jour approche
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
         <TimeBox label="Jours" value={timeLeft.days} />
         <TimeBox label="Heures" value={timeLeft.hours} />
         <TimeBox label="Minutes" value={timeLeft.minutes} />
@@ -45,12 +45,12 @@ export default function Countdown() {
 function TimeBox({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex flex-col items-center space-y-2">
-      <div className="bg-[rgba(212,175,55,0.1)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-4 w-full aspect-square flex items-center justify-center">
-        <div className="text-4xl md:text-5xl text-accent font-light">
+      <div className="bg-[rgba(212,175,55,0.1)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-2 md:p-4 w-full aspect-square flex items-center justify-center">
+        <div className="text-2xl md:text-4xl lg:text-5xl text-accent font-light">
           {value.toString().padStart(2, "0")}
         </div>
       </div>
-      <div className="text-refined">{label}</div>
+      <div className="text-refined text-sm md:text-base">{label}</div>
     </div>
   );
 }
