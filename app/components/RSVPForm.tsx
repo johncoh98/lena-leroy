@@ -53,7 +53,7 @@ export default function RSVPForm() {
 
   return (
     <div className="invitation-container p-6 md:p-12 rounded-lg max-w-3xl mx-auto">
-      <h2 className="title-royal text-xl md:text-2xl lg:text-3xl text-center mb-8 md:mb-12">
+      <h2 className="title-royal text-lg md:text-xl lg:text-2xl text-center mb-8 md:mb-10">
         <span className="text-accent">C</span>onfirme ta présence
       </h2>
 
@@ -62,7 +62,7 @@ export default function RSVPForm() {
           <p className="text-refined text-base md:text-lg">
             Merci pour ta réponse
           </p>
-          <p className="text-accent text-lg">✦</p>
+          <p className="text-accent text-base">✦</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">

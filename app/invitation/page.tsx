@@ -79,7 +79,7 @@ export default function InvitationPage() {
 
           <motion.h1 
             variants={fadeInUp}
-            className="title-royal text-4xl md:text-5xl mb-6"
+            className="title-royal text-2xl md:text-3xl lg:text-4xl mb-6"
           >
             <span className="text-accent">L</span>ena <span className="text-accent">&</span> <span className="text-accent">L</span>eroy
           </motion.h1>
