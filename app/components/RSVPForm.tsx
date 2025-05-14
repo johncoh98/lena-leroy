@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent } from 'react';
+import React from 'react';
 
-const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbzMif7i3kH5Elrc1qpOVNRIeXLXCQTbSnxqi_MxVv_Yrq1FLt5S0Pr1hZcO9FmXecF2fQ/exec';
+const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbx24VanxbrPy3qb-S8ZwxUfbxA-F7U03fj5uqILJWSMNKedYuzBmwVzPHLNzbglTfIofw/exec';
 
 type FormFields = {
   fullName: string;
@@ -11,6 +12,8 @@ type FormFields = {
   presenceMairie: string;
   guestsMairie: string;
   comment: string;
+  additionalGuestsSoiree: string[];
+  additionalGuestsMairie: string[];
 };
 
 export default function RSVPForm() {
@@ -21,33 +24,74 @@ export default function RSVPForm() {
     presenceMairie: '',
     guestsMairie: '',
     comment: '',
+    additionalGuestsSoiree: [],
+    additionalGuestsMairie: [],
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    if (name === 'guestsSoiree') {
+      const guestsCount = parseInt(value) || 0;
+      setForm(prev => ({
+        ...prev,
+        [name]: value,
+        additionalGuestsSoiree: Array(Math.max(0, guestsCount - 1)).fill('')
+      }));
+    } else if (name === 'guestsMairie') {
+      const guestsCount = parseInt(value) || 0;
+      setForm(prev => ({
+        ...prev,
+        [name]: value,
+        additionalGuestsMairie: Array(Math.max(0, guestsCount - 1)).fill('')
+      }));
+    } else {
+      setForm(prev => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleAdditionalGuestChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number,
+    type: 'soiree' | 'mairie'
+  ) => {
+    const { value } = event.target;
+    setForm(prev => ({
+      ...prev,
+      [type === 'soiree' ? 'additionalGuestsSoiree' : 'additionalGuestsMairie']: prev[type === 'soiree' ? 'additionalGuestsSoiree' : 'additionalGuestsMairie'].map(
+        (guest, i) => (i === index ? value : guest)
+      ),
+    }));
+  };
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch(GOOGLE_FORM_URL, {
-        method: 'POST',
-        body: JSON.stringify(form),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    if (formRef.current) {
+      // Add additional guests to the form before submission
+      const formData = new FormData(formRef.current);
+      form.additionalGuestsSoiree.forEach((guest, index) => {
+        formData.append(`additionalGuestSoiree${index + 1}`, guest);
       });
-      if (response.ok) {
-        setSubmitted(true);
-      } else {
-        alert('Une erreur est survenue. Merci de réessayer plus tard.');
-      }
-    } catch {
-      alert('Une erreur est survenue. Merci de réessayer plus tard.');
+      form.additionalGuestsMairie.forEach((guest, index) => {
+        formData.append(`additionalGuestMairie${index + 1}`, guest);
+      });
+      
+      // Convert FormData to URLSearchParams
+      const params = new URLSearchParams();
+      formData.forEach((value, key) => {
+        params.append(key, value.toString());
+      });
+      
+      // Update form action with parameters
+      formRef.current.action = `${GOOGLE_FORM_URL}?${params.toString()}`;
+      formRef.current.submit();
+      setSubmitted(true);
     }
   };
 
@@ -57,6 +101,8 @@ export default function RSVPForm() {
         <span className="text-accent">C</span>onfirme ta présence
       </h2>
 
+      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: 'none' }} />
+
       {submitted ? (
         <div className="text-center space-y-4">
           <p className="text-refined text-base md:text-lg">
@@ -65,7 +111,14 @@ export default function RSVPForm() {
           <p className="text-accent text-base">✦</p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+        <form 
+          ref={formRef}
+          action={GOOGLE_FORM_URL}
+          method="POST"
+          target="hidden_iframe"
+          onSubmit={handleSubmit} 
+          className="space-y-4 md:space-y-6"
+        >
           <TextInput label="Nom & Prénom" name="fullName" required onChange={handleChange} />
           <SelectInput
             label="Viendras-tu à la soirée ?"
@@ -78,9 +131,19 @@ export default function RSVPForm() {
             label="Combien serez-vous pour la soirée ?"
             name="guestsSoiree"
             type="number"
+            min="1"
             required
             onChange={handleChange}
           />
+          {form.additionalGuestsSoiree.map((_, index) => (
+            <TextInput
+              key={`soiree-guest-${index}`}
+              label={`Nom & Prénom de l'invité ${index + 2}`}
+              name={`additionalGuestSoiree${index + 1}`}
+              required
+              onChange={(e) => handleAdditionalGuestChange(e, index, 'soiree')}
+            />
+          ))}
           <SelectInput
             label="Viendras-tu à la mairie ?"
             name="presenceMairie"
@@ -92,9 +155,19 @@ export default function RSVPForm() {
             label="Combien serez-vous pour la mairie ?"
             name="guestsMairie"
             type="number"
+            min="1"
             required
             onChange={handleChange}
           />
+          {form.additionalGuestsMairie.map((_, index) => (
+            <TextInput
+              key={`mairie-guest-${index}`}
+              label={`Nom & Prénom de l'invité ${index + 2}`}
+              name={`additionalGuestMairie${index + 1}`}
+              required
+              onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
+            />
+          ))}
           <div className="space-y-1.5">
             <label htmlFor="comment" className="block text-refined text-xs md:text-sm">
               Message pour les mariés (optionnel)
@@ -120,13 +193,14 @@ export default function RSVPForm() {
 
 type TextInputProps = {
   label: string;
-  name: keyof FormFields;
+  name: string;
   type?: 'text' | 'number';
   required?: boolean;
+  min?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-function TextInput({ label, name, type = 'text', required = false, onChange }: TextInputProps) {
+function TextInput({ label, name, type = 'text', required = false, min, onChange }: TextInputProps) {
   return (
     <div className="space-y-1">
       <label htmlFor={name} className="block text-refined text-xs md:text-sm">
@@ -136,6 +210,7 @@ function TextInput({ label, name, type = 'text', required = false, onChange }: T
         type={type}
         name={name}
         required={required}
+        min={min}
         onChange={onChange}
         className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-2.5 text-refined text-xs md:text-sm focus:outline-none focus:border-[var(--accent)]/40 transition-colors"
       />
@@ -145,7 +220,7 @@ function TextInput({ label, name, type = 'text', required = false, onChange }: T
 
 type SelectInputProps = {
   label: string;
-  name: keyof FormFields;
+  name: string;
   options: string[];
   required?: boolean;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
