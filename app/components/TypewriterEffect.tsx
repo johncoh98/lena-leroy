@@ -11,7 +11,7 @@ export default function TypewriterEffect({ text, delay = 0, className = '' }: Ty
   
   const container = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: () => ({
       opacity: 1,
       transition: { staggerChildren: 0.12, delayChildren: delay / 1000 },
     }),

@@ -23,24 +23,26 @@ export default function MainAudioPlayer({ audioUrl }: MainAudioPlayerProps) {
   };
 
   useEffect(() => {
-    const updateProgress = () => {
-      if (audioRef.current) {
-        const { currentTime, duration } = audioRef.current;
-        const progressPercent = (currentTime / duration) * 100;
-        setProgress(progressPercent);
-      }
-    };
+  const audio = audioRef.current;
 
-    if (audioRef.current) {
-      audioRef.current.addEventListener('timeupdate', updateProgress);
+  const updateProgress = () => {
+    if (audio) {
+      const { currentTime, duration } = audio;
+      const progressPercent = (currentTime / duration) * 100;
+      setProgress(progressPercent);
     }
+  };
 
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('timeupdate', updateProgress);
-      }
-    };
-  }, []);
+  if (audio) {
+    audio.addEventListener('timeupdate', updateProgress);
+  }
+
+  return () => {
+    if (audio) {
+      audio.removeEventListener('timeupdate', updateProgress);
+    }
+  };
+}, []);
 
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ background: 'url(/toile-de-jouy-violet.png)' }}>

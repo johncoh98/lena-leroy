@@ -2,6 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Image from 'next/image'; 
+
 
 export default function Home() {
   const router = useRouter();
@@ -29,11 +31,13 @@ export default function Home() {
           transition={{ duration: 1.5 }}
           className="mb-16 w-64 h-64 md:w-80 md:h-80"
         >
-          <img 
-            src="/logo.png" 
-            alt="Logo Lena & Leroy" 
-            className="w-full h-full object-contain contrast-[1.2] brightness-[0.85]" 
-          />
+           <Image
+    src="/logo.png"
+    alt="Logo Lena & Leroy"
+    fill
+    className="object-contain contrast-[1.2] brightness-[0.85]"
+    priority
+  />
         </motion.div>
 
         {/* Bouton d'entrée */}
