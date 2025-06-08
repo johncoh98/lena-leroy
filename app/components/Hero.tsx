@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import TypewriterEffect from './TypewriterEffect';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -34,56 +33,51 @@ export default function Hero() {
       whileInView="visible"
       viewport={{ once: true, margin: "-20%" }}
       variants={stagger}
-      className="text-center max-w-3xl mx-auto space-y-8 invitation-container p-12 rounded-lg relative"
+      className="text-center max-w-3xl mx-auto space-y-8 invitation-container p-12 rounded-3xl relative"
     >
-      <div className="absolute inset-0 bg-[rgba(42,26,58,0.3)] backdrop-blur-sm rounded-lg -z-10" />
+      <div className="absolute inset-0 bg-[rgba(42,26,58,0.3)] backdrop-blur-sm rounded-3xl -z-10" />
 
-      <motion.h1
+      <motion.h2
         variants={fadeInUp}
-        className="title-royal text-2xl md:text-3xl lg:text-4xl mb-6"
+        className="title-royal text-3xl md:text-5xl text-[var(--accent)] mb-4"
       >
-        <span className="text-accent">L</span>ena <span className="text-accent">&</span> <span className="text-accent">L</span>eroy
-      </motion.h1>
+        Mairie
+      </motion.h2>
 
-      <motion.div variants={fadeInUp} className="space-y-4">
-        <p className="text-refined text-xl md:text-2xl">
-          <span className="text-accent">Jeudi</span> 4 septembre <span className="text-accent">2025</span>
-        </p>
-        <p className="text-refined text-lg italic">Paris, France</p>
-      </motion.div>
-
-      <motion.div
+      <motion.p
         variants={fadeInUp}
-        className="my-10 h-px bg-[var(--accent)]/20"
-      />
-
-      <motion.blockquote variants={fadeInUp} className="text-refined text-xl">
-        <TypewriterEffect
-          text="Nous avons l'honneur de vous convier à célébrer notre union"
-          delay={800}
-          className="italic"
-        />
-      </motion.blockquote>
-
-      <motion.div variants={fadeInUp} className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-refined text-base md:text-lg tracking-wide font-light">
-        <div className="space-y-2">
-          <p className="italic">Mme Corine & Mr Olivier Uzan</p>
-          <p className="italic">Mme Mireille Uzan</p>
-        </div>
-        <div className="space-y-2">
-          <p className="italic">Mme Deborah & Mr Stéphane Tayar</p>
-          <p className="italic">Mme Doly Zarka</p>
-          <p className="italic">Mme Nicole & Mr Elie Tayar</p>
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={fadeInUp}
-        className="italic text-sm md:text-base text-muted mt-6 leading-relaxed"
+        className="text-refined text-xl md:text-2xl text-[var(--foreground)]"
       >
-        Une pensée émue et remplie de tendresse pour la mémoire bénie<br />
-        de nos êtres partis trop tôt : <span className="font-semibold">Mamie Jeanne, Papy Jacques et Papy Jules</span>
-      </motion.div>
+        Lena & Leroy
+      </motion.p>
+
+      <motion.p
+        variants={fadeInUp}
+        className="italic text-[var(--foreground)]"
+      >
+        se diront <span className="text-accent font-semibold">« oui »</span>
+      </motion.p>
+
+      <motion.p
+        variants={fadeInUp}
+        className="text-refined text-sm md:text-base leading-relaxed text-[var(--foreground)]/80"
+      >
+        Le <strong className="text-[var(--accent)]">mardi 2 juillet à 15h00</strong><br />
+        À la mairie du 19<sup>e</sup> arrondissement<br />
+        5-7 Place Armand Carrel, 75019 Paris
+      </motion.p>
+
+      <motion.a
+        variants={fadeInUp}
+        href="https://waze.com/ul?ll=48.8849,2.3812&navigate=yes"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block mt-4 bg-[var(--accent)] text-white px-6 py-2 rounded-full text-sm font-medium shadow-md hover:bg-[var(--accent)]/90 transition"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Lien Waze
+      </motion.a>
     </motion.section>
   );
 }

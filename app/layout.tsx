@@ -22,8 +22,7 @@ const petitFormal = Petit_Formal_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Lena & Leroy - Wedding Invitation",
-  description: "Join us to celebrate our wedding in Paris",
+  title: "Lena & Leroy - Invitation au Mariage",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
