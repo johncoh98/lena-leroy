@@ -35,7 +35,12 @@ export default function WeddingLocation() {
               <h3 className="text-base md:text-xl font-semibold mb-2 text-[var(--accent)]">
                 Mairie du 19<sup>e</sup>
               </h3>
-              <p className="italic text-xs md:text-sm mb-3 md:mb-6 text-[var(--foreground)]/80">5-7 Place Armand Carrel, 75019 Paris</p>
+              <p className="italic text-xs md:text-sm mb-1 text-[var(--foreground)]/80">
+                5-7 Place Armand Carrel, 75019 Paris
+              </p>
+              <p className="text-[var(--foreground)] text-sm md:text-base font-light mb-3">
+                <strong className="text-accent">Mardi 2 juillet 2025</strong> à <strong>15h00</strong>
+              </p>
 
               <div className="w-full h-40 md:h-64 border-2 border-[var(--accent)]/20 rounded-2xl overflow-hidden shadow-md mb-3 md:mb-6">
                 <iframe
@@ -55,7 +60,7 @@ export default function WeddingLocation() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  📍 Google Maps
+                   Google Maps
                 </motion.a>
                 <motion.a
                   href="https://waze.com/ul?ll=48.8849,2.3812&navigate=yes"
@@ -65,13 +70,13 @@ export default function WeddingLocation() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  🚗 Waze
+                   Waze
                 </motion.a>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Salle Le White */}
+          {/* Houppa - Salle Le White */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +88,12 @@ export default function WeddingLocation() {
               className="w-full p-3 md:p-6 bg-[rgba(42,26,58,0.98)] backdrop-blur-sm rounded-2xl shadow-lg border border-[var(--accent)]/10"
             >
               <h3 className="text-base md:text-xl font-semibold mb-2 text-[var(--accent)]">Salle Le White</h3>
-              <p className="italic text-xs md:text-sm mb-3 md:mb-6 text-[var(--foreground)]/80">10 Rue de la Croix Rouge, 93330 Neuilly-sur-Marne</p>
+              <p className="italic text-xs md:text-sm mb-1 text-[var(--foreground)]/80">
+                10 Rue de la Croix Rouge, 93330 Neuilly-sur-Marne
+              </p>
+              <p className="text-[var(--foreground)] text-sm md:text-base font-light mb-3">
+                <strong className="text-accent">Jeudi 4 septembre 2025</strong> à <strong>18h00</strong>
+              </p>
 
               <div className="w-full h-40 md:h-64 border-2 border-[var(--accent)]/20 rounded-2xl overflow-hidden shadow-md mb-3 md:mb-6">
                 <iframe
@@ -103,7 +113,7 @@ export default function WeddingLocation() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  📍 Google Maps
+                   Google Maps
                 </motion.a>
                 <motion.a
                   href="https://waze.com/ul?ll=48.8498,2.5275&navigate=yes"
@@ -113,7 +123,7 @@ export default function WeddingLocation() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  🚗 Waze
+                   Waze
                 </motion.a>
               </div>
             </motion.div>

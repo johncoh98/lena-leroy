@@ -6,32 +6,10 @@ import ScrollingMotifs from '../components/ScrollingMotifs';
 import DecorativeDivider from '../components/DecorativeDivider';
 import MainAudioPlayer from '../components/MainAudioPlayer';
 import WeddingLocation from '../components/WeddingLocation';
-import TypewriterEffect from '../components/TypewriterEffect';
 import { useEffect } from 'react';
+import Hero from '../components/Hero';
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
 
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
 
 const defaultTransition = {
   type: "spring",
@@ -68,49 +46,7 @@ export default function InvitationPage() {
       <div className="py-12 px-4 md:px-10 space-y-20">
         <ScrollingMotifs />
         
-        <motion.section 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-20%" }}
-          variants={stagger}
-          className="text-center max-w-3xl mx-auto space-y-8 invitation-container p-12 rounded-lg relative"
-        >
-          <div className="absolute inset-0 bg-[rgba(42,26,58,0.3)] backdrop-blur-sm rounded-lg -z-10"></div>
-
-          <motion.h1 
-            variants={fadeInUp}
-            className="title-royal text-2xl md:text-3xl lg:text-4xl mb-6"
-          >
-            <span className="text-accent">L</span>ena <span className="text-accent">&</span> <span className="text-accent">L</span>eroy
-          </motion.h1>
-
-          <motion.div 
-            variants={fadeInUp}
-            className="space-y-4"
-          >
-            <p className="text-refined text-xl md:text-2xl">
-              <span className="text-accent">Jeudi</span> 4 septembre <span className="text-accent">2025</span>
-            </p>
-            <p className="text-refined text-lg italic">Paris, France</p>
-          </motion.div>
-
-          <motion.div 
-            variants={fadeInUp}
-            className="my-10 h-px bg-[var(--accent)]/20"
-          />
-
-          <motion.blockquote 
-            variants={fadeInUp}
-            className="text-refined text-xl"
-          >
-            <TypewriterEffect 
-              text="Nous avons l'honneur de vous convier à célébrer notre union"
-              delay={800}
-              className="italic"
-            />
-          </motion.blockquote>
-        </motion.section>
-
+                  <Hero />
 
 
         <motion.div
