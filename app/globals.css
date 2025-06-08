@@ -7,7 +7,7 @@
   --secondary: #ffffff;
   --background: #2a1a3a;
   --foreground: #ffffff;
-  --accent: #d4af37;
+  --accent: #fdeaab;
   --gold: #d4af37;
   --gold-light: #f4e4bc;
   --button-bg: rgba(196, 169, 98, 0.1);
@@ -98,7 +98,7 @@ p {
 
 .text-accent {
   color: var(--accent);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 10px rgba(168, 143, 62, 0.3);
   transition: text-shadow 0.3s ease;
 }
 
@@ -275,10 +275,12 @@ blockquote {
 
 /* Styles typographiques royaux */
 .title-royal {
-  font-family: var(--font-petit-formal), cursive;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  line-height: 1.6;
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--foreground);
 }
 
 .text-refined {
@@ -292,7 +294,7 @@ blockquote {
   font-family: 'Lora', serif;
   font-weight: 400;
   letter-spacing: 0.03em;
-  line-height: 1.8;
+  line-height: 1;
 }
 
 /* Effets de survol */
