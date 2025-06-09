@@ -82,7 +82,7 @@ export default function WeddingLocation() {
         className="text-refined text-base md:text-lg leading-relaxed text-[var(--foreground)]"
       >
         <p>
-          <strong className="text-accent">Jeudi 4 septembre 2025</strong> à <strong>17h30</strong><br />
+          <strong className="text-accent">Jeudi 4 septembre 2025</strong> à <strong>17h00</strong><br />
           Salle Le White<br />
           10 Rue de la Croix Rouge, 93330 Neuilly-sur-Marne
         </p>
