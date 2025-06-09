@@ -68,7 +68,7 @@ export default function WeddingLocation() {
         className="italic text-sm md:text-base text-muted mt-6 leading-relaxed"
       >
         Une pensée émue et remplie de tendresse pour la mémoire bénie<br />
-        de <strong>Mamie Jeanne, Papy Jacques et Papy Jules</strong>
+        de <strong>Mamie Jeanne, Papy Jacques, Papy Charles et Papy Jules</strong>
       </motion.p>
 
       <motion.div
@@ -82,7 +82,7 @@ export default function WeddingLocation() {
         className="text-refined text-base md:text-lg leading-relaxed text-[var(--foreground)]"
       >
         <p>
-          <strong className="text-accent">Jeudi 4 septembre 2025</strong> à <strong>18h00</strong><br />
+          <strong className="text-accent">Jeudi 4 septembre 2025</strong> à <strong>17h30</strong><br />
           Salle Le White<br />
           10 Rue de la Croix Rouge, 93330 Neuilly-sur-Marne
         </p>

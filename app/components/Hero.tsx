@@ -62,7 +62,7 @@ export default function Hero() {
         variants={fadeInUp}
         className="text-refined text-sm md:text-base leading-relaxed text-[var(--foreground)]/80"
       >
-        Le <strong className="text-[var(--accent)]">mardi 2 juillet à 15h00</strong><br />
+        Le <strong className="text-[var(--accent)]">mardi 2 juillet à 14h30</strong><br />
         À la mairie du 19<sup>e</sup> arrondissement<br />
         5-7 Place Armand Carrel, 75019 Paris
       </motion.p>
