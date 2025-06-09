@@ -40,7 +40,7 @@ export default function WeddingLocation() {
       {/* Texte d'invitation */}
       <motion.h2
         variants={fadeInUp}
-        className="title-royal text-xl md:text-3xl mb-6 md:mb-8 shine-effect"
+        className="title-subtle text-xl md:text-3xl mb-6 md:mb-8 shine-effect"
       >
         <span className="text-accent">N</span>ous avons la joie de vous faire part du mariage de leurs enfants
       </motion.h2>

@@ -282,6 +282,15 @@ blockquote {
   text-transform: uppercase;
   color: var(--foreground);
 }
+.title-subtle {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+
 
 
 .text-refined {
