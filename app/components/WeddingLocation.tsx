@@ -68,7 +68,7 @@ export default function WeddingLocation() {
         className="italic text-sm md:text-base text-muted mt-6 leading-relaxed"
       >
         Une pensée émue et remplie de tendresse pour la mémoire bénie<br />
-        de <strong>Mamie Jeanne, Papy Jacques, Papy Charles et Papy Jules</strong>
+        de <strong>Mamie Jeanne, Papi Jacques, Papi Charles et Papi Jules</strong>
       </motion.p>
 
       <motion.div
