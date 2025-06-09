@@ -276,12 +276,13 @@ blockquote {
 /* Styles typographiques royaux */
 .title-royal {
   font-family: 'Bodoni Moda', serif;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   line-height: 1.4;
   text-transform: uppercase;
   color: var(--foreground);
 }
+
 
 .text-refined {
   font-family: var(--font-cormorant);
