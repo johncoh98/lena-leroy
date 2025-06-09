@@ -48,18 +48,23 @@ export default function WeddingLocation() {
       {/* Deux colonnes familles */}
     <motion.div
   variants={fadeInUp}
-  className="flex flex-wrap justify-center gap-6 text-refined text-base md:text-lg tracking-wide font-light text-left"
+  className="flex justify-center gap-10 text-refined text-base md:text-lg tracking-wide font-light text-left"
 >
-  <div className="flex-1 min-w-[40%] max-w-[45%] space-y-2">
+  {/* Famille Uzan */}
+  <div className="w-1/2 flex flex-col items-end pr-4 border-[var(--foreground)]/30 space-y-2 text-right">
     <p className="italic">Mme Corine & Mr Olivier Uzan</p>
     <p className="italic">Mme Mireille Uzan</p>
   </div>
-  <div className="flex-1 min-w-[40%] max-w-[45%] space-y-2">
+
+  {/* Famille Tayar */}
+  <div className="w-1/2 flex flex-col items-start pl-4 space-y-2 text-left">
     <p className="italic">Mme Deborah & Mr Stéphane Tayar</p>
     <p className="italic">Mme Doly Zarka</p>
     <p className="italic">Mme Nicole & Mr Elie Tayar</p>
   </div>
 </motion.div>
+
+
 
 
       {/* Pensée hommage */}
