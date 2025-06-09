@@ -41,49 +41,54 @@ export default function WeddingCard() {
       </motion.h3>
 
       {/* Titre */}
-      <motion.h2
-        variants={fadeInUp}
-        className="text-xl md:text-2xl uppercase title-royal text-[var(--foreground)] tracking-wider"
-      >
-        Houppa et Soirée
-      </motion.h2>
+    <motion.h2
+  variants={fadeInUp}
+  style={{ fontSize: '1.4rem' }}
+  className="text-xl md:text-2xl uppercase title-royal !text-[var(--accent)] tracking-wider"
+>
+  Houppa et Soirée
+</motion.h2>
+
+
+
 
       {/* Familles */}
-      <motion.div
-        variants={fadeInUp}
-        className="grid grid-cols-2 gap-12 text-refined text-base md:text-lg tracking-wide font-light"
-      >
-        {/* Famille Uzan */}
-        <div className="space-y-4 text-right">
-          <div>
-            <p className="italic">Mme Corine &</p>
-            <p className="italic">Mr Olivier Uzan</p>
-          </div>
-           <div>
-           
-          </div>
-          <div>
-            <p className="italic">Mme Mireille</p>
-            <p className="italic">Uzan</p>
-          </div>
-        </div>
+   <motion.div
+  variants={fadeInUp}
+  className="grid grid-cols-3 gap-x-6 w-full text-center"
+>
+  {/* Colonne gauche - Famille Uzan */}
+  <div className="flex flex-col items-end space-y-1 text-right">
+    <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic">Corine & Olivier Uzan </p>
+        <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic invisible">invisible</p>
 
-        {/* Famille Tayar */}
-        <div className="space-y-4 text-left">
-          <div>
-            <p className="italic">Mme Deborah &</p>
-            <p className="italic">Mr Stéphane Tayar</p>
-          </div>
-          <div>
-            <p className="italic">Mme Doly</p>
-            <p className="italic">Zarka</p>
-          </div>
-          <div>
-            <p className="italic">Mme Nicole &</p>
-            <p className="italic">Mr Elie Tayar</p>
-          </div>
-        </div>
-      </motion.div>
+    <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic">Mireille Uzan</p>
+    <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic invisible">invisible</p>
+  </div>
+
+  {/* Texte central */}
+  <div className="flex flex-col justify-center items-center text-center">
+
+  </div>
+
+  {/* Colonne droite - Famille Tayar */}
+  <div className="flex flex-col items-start space-y-1 text-left">
+    <p style={{ fontSize: '0.55rem', lineHeight: '1.2' }} className="italic">Deborah & Stéphane Tayar</p>
+    <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic">Doly Zarka</p>
+    <p style={{ fontSize: '0.65rem', lineHeight: '1.2' }} className="italic">Nicole & Elie Tayar</p>
+  </div>
+</motion.div>
+
+      <motion.p
+        variants={fadeInUp}
+        className="italic text-sm md:text-base text-[var(--foreground)]/80 leading-relaxed text-center mt-6"
+      >
+        Une pensée émue et remplie de tendresse pour la mémoire bénie<br />
+        de <strong className="font-semibold italic text-white">
+          Mamie Jeanne, Papy Jacques, Papy Charles et Papy Jules
+        </strong>
+      </motion.p>
+
 
       {/* Texte d'invitation */}
       <motion.p
@@ -91,13 +96,15 @@ export default function WeddingCard() {
         className="text-sm md:text-base italic text-[var(--foreground)]/80 leading-relaxed mt-4"
       >
         ont la joie de vous faire part<br />
-        du mariage de leurs enfants
+        du mariage de leurs enfants et petits-enfants
       </motion.p>
 
       {/* Prénoms */}
       <motion.h1
         variants={fadeInUp}
-        className="text-3xl md:text-4xl font-serif text-accent tracking-wide"
+          style={{ fontSize: '1.4rem' }}
+
+        className="text-2xl md:text-3xl font-serif text-accent tracking-wide"
       >
         Lena & Leroy
       </motion.h1>
@@ -108,11 +115,8 @@ export default function WeddingCard() {
         className="text-sm md:text-base italic text-[var(--foreground)]/80"
       >
         et seraient honorés de votre présence<br />
-        à la cérémonie religieuse qui sera célébrée
+        à la cérémonie religieuse qui sera célébrée le
       </motion.p>
-
-      {/* Séparateur */}
-      <motion.div variants={fadeInUp} className="h-px bg-[var(--accent)]/20 my-6" />
 
       {/* Date et lieu */}
       <motion.div variants={fadeInUp} className="space-y-3 text-refined text-base md:text-lg">
@@ -165,15 +169,7 @@ export default function WeddingCard() {
       </motion.div>
 
       {/* Grands-parents */}
-      <motion.p
-        variants={fadeInUp}
-        className="italic text-sm md:text-base text-[var(--foreground)]/80 leading-relaxed text-center mt-6"
-      >
-        Une pensée émue et remplie de tendresse pour la mémoire bénie<br />
-        de <strong className="font-semibold italic text-white">
-          Mamie Jeanne, Papy Jacques, Papy Charles et Papy Jules
-        </strong>
-      </motion.p>
+      
     </motion.section>
   );
 }

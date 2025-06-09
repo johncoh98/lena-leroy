@@ -120,30 +120,36 @@ export default function RSVPForm() {
           className="space-y-4 md:space-y-6"
         >
           
-          <SelectInput
-            label="Viendras-tu à la mairie ?"
-            name="presenceMairie"
-            required
-            options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
-            onChange={handleChange}
-          />
-          <TextInput
-            label="Combien serez-vous pour la mairie ?"
-            name="guestsMairie"
-            type="number"
-            min="1"
-            required
-            onChange={handleChange}
-          />
-          {form.additionalGuestsMairie.map((_, index) => (
-            <TextInput
-              key={`mairie-guest-${index}`}
-              label={`Nom & Prénom de l'invité ${index + 2}`}
-              name={`additionalGuestMairie${index + 1}`}
-              required
-              onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
-            />
-          ))}
+         <SelectInput
+  label="Viendras-tu à la mairie ?"
+  name="presenceMairie"
+  required
+  options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
+  onChange={handleChange}
+/>
+<TextInput
+  label="Combien serez-vous pour la mairie ?"
+  name="guestsMairie"
+  type="number"
+  min="1"
+  required
+  onChange={handleChange}
+/>
+<TextInput
+  label="Nom & Prénom"
+  name="fullName"
+  required
+  onChange={handleChange}
+/>
+{form.additionalGuestsMairie.map((_, index) => (
+  <TextInput
+    key={`mairie-guest-${index}`}
+    label={`Nom & Prénom de l'invité ${index + 2}`}
+    name={`additionalGuestMairie${index + 1}`}
+    required
+    onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
+  />
+))}
           <TextInput label="Nom & Prénom" name="fullName" required onChange={handleChange} />
           <SelectInput
             label="Viendras-tu à la soirée ?"

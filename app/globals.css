@@ -428,3 +428,11 @@ a:hover {
   font-family: var(--font-petit-formal), cursive;
   letter-spacing: 0.02em;
 }
+.unstyle-all {
+  all: unset;
+  display: block;
+  font-family: 'Lora', serif;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+}
