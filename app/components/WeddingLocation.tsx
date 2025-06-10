@@ -95,9 +95,8 @@ export default function WeddingCard() {
         variants={fadeInUp}
         className="text-sm md:text-base italic text-[var(--foreground)]/80 leading-relaxed mt-4"
       >
-        ont la joie de vous faire part<br />
-        du mariage de leurs enfants et petits-enfants
-      </motion.p>
+       leurs enfants et petits-enfants<br />
+        ont la joie de vous annoncer leur mariage      </motion.p>
 
       {/* Prénoms */}
       <motion.h1
