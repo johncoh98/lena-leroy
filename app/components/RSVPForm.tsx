@@ -36,7 +36,7 @@ export default function RSVPForm() {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    
+
     if (name === 'guestsSoiree') {
       const guestsCount = parseInt(value) || 0;
       setForm(prev => ({
@@ -70,39 +70,33 @@ export default function RSVPForm() {
     }));
   };
 
-const handleSubmit = (e: FormEvent) => {
-  e.preventDefault();
-  if (formRef.current) {
-    // Supprimer anciens champs dynamiques
-    [...formRef.current.querySelectorAll('input[type="hidden"]')].forEach((el) => el.remove());
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (formRef.current) {
+      // Clear old hidden fields
+      [...formRef.current.querySelectorAll('input[type="hidden"]')].forEach(el => el.remove());
 
-    // Ajouter les noms supplémentaires soirée
-
-
-    // Ajouter les noms supplémentaires mairie
-    form.additionalGuestsMairie.forEach((guest, index) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = `additionalGuestMairie${index + 1}`;
-      input.value = guest;
-      formRef.current?.appendChild(input);
-    });
+      // Add hidden inputs for additional guests
+      form.additionalGuestsMairie.forEach((guest, index) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = `additionalGuestMairie${index + 1}`;
+        input.value = guest;
+        formRef.current?.appendChild(input);
+      });
 
       form.additionalGuestsSoiree.forEach((guest, index) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = `additionalGuestSoiree${index + 1}`;
-      input.value = guest;
-      formRef.current?.appendChild(input);
-    });
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = `additionalGuestSoiree${index + 1}`;
+        input.value = guest;
+        formRef.current?.appendChild(input);
+      });
 
-    // Envoyer
-    formRef.current.submit();
-    setSubmitted(true);
-  }
-};
-
-
+      formRef.current.submit();
+      setSubmitted(true);
+    }
+  };
 
   return (
     <div className="invitation-container p-6 md:p-12 rounded-lg max-w-3xl mx-auto">
@@ -120,103 +114,98 @@ const handleSubmit = (e: FormEvent) => {
           <p className="text-accent text-base">✦</p>
         </div>
       ) : (
-       <form
-  ref={formRef}
-  action={GOOGLE_FORM_URL}
-  method="POST"
-  target="hidden_iframe"
-  onSubmit={handleSubmit}
-  className="space-y-4 md:space-y-6"
->
-  {/* Nom en haut */}
-  <TextInput
-    label="Nom & Prénom"
-    name="fullName"
-    required
-    onChange={handleChange}
-  />
+        <form
+          ref={formRef}
+          action={GOOGLE_FORM_URL}
+          method="POST"
+          target="hidden_iframe"
+          onSubmit={handleSubmit}
+          className="space-y-4 md:space-y-6"
+        >
+          <TextInput
+            label="Nom & Prénom"
+            name="fullName"
+            required
+            onChange={handleChange}
+          />
 
-  {/* Mairie */}
-  <SelectInput
-    label="Viendras-tu à la mairie ?"
-    name="presenceMairie"
-    required
-    options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
-    onChange={handleChange}
-  />
-  {form.presenceMairie.toLowerCase() !== 'non, avec regrets' && (
-    <>
-      <TextInput
-        label="Combien serez-vous pour la mairie ?"
-        name="guestsMairie"
-        type="number"
-        min="1"
-        required
-        onChange={handleChange}
-      />
-      {form.additionalGuestsMairie.map((_, index) => (
-        <TextInput
-          key={`mairie-guest-${index}`}
-          label={`Nom & Prénom de l'invité ${index + 2}`}
-          name={`additionalGuestMairie${index + 1}`}
-          required
-          onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
-        />
-      ))}
-    </>
-  )}
+          <SelectInput
+            label="Viendras-tu à la mairie ?"
+            name="presenceMairie"
+            required
+            options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
+            onChange={handleChange}
+          />
+          {form.presenceMairie.toLowerCase() !== 'non, avec regrets' && (
+            <>
+              <TextInput
+                label="Combien serez-vous pour la mairie ?"
+                name="guestsMairie"
+                type="number"
+                min="1"
+                required
+                onChange={handleChange}
+              />
+              {form.additionalGuestsMairie.map((_, index) => (
+                <TextInput
+                  key={`mairie-guest-${index}`}
+                  label={`Nom & Prénom de l'invité ${index + 2}`}
+                  name={`additionalGuestMairie${index + 1}`}
+                  required
+                  onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
+                />
+              ))}
+            </>
+          )}
 
-  {/* Soirée */}
-  <SelectInput
-    label="Viendras-tu à la soirée ?"
-    name="presenceSoiree"
-    required
-    options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
-    onChange={handleChange}
-  />
-  {form.presenceSoiree.toLowerCase() !== 'non, avec regrets' && (
-    <>
-      <TextInput
-        label="Combien serez-vous pour la soirée ?"
-        name="guestsSoiree"
-        type="number"
-        min="1"
-        required
-        onChange={handleChange}
-      />
-      {form.additionalGuestsSoiree.map((_, index) => (
-        <TextInput
-          key={`soiree-guest-${index}`}
-          label={`Nom & Prénom de l'invité ${index + 2}`}
-          name={`additionalGuestSoiree${index + 1}`}
-          required
-          onChange={(e) => handleAdditionalGuestChange(e, index, 'soiree')}
-        />
-      ))}
-    </>
-  )}
+          <SelectInput
+            label="Viendras-tu à la soirée ?"
+            name="presenceSoiree"
+            required
+            options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
+            onChange={handleChange}
+          />
+          {form.presenceSoiree.toLowerCase() !== 'non, avec regrets' && (
+            <>
+              <TextInput
+                label="Combien serez-vous pour la soirée ?"
+                name="guestsSoiree"
+                type="number"
+                min="1"
+                required
+                onChange={handleChange}
+              />
+              {form.additionalGuestsSoiree.map((_, index) => (
+                <TextInput
+                  key={`soiree-guest-${index}`}
+                  label={`Nom & Prénom de l'invité ${index + 2}`}
+                  name={`additionalGuestSoiree${index + 1}`}
+                  required
+                  onChange={(e) => handleAdditionalGuestChange(e, index, 'soiree')}
+                />
+              ))}
+            </>
+          )}
 
-  {/* Message optionnel */}
-  <div className="space-y-1.5">
-    <label htmlFor="comment" className="block text-refined text-xs md:text-sm">
-      Message pour les mariés (optionnel)
-    </label>
-    <textarea
-      name="comment"
-      rows={3}
-      className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-2.5 text-refined text-xs md:text-sm focus:outline-none focus:border-[var(--accent)]/40 transition-colors"
-      onChange={handleChange}
-    />
-  </div>
+          <div className="space-y-1.5">
+            <label htmlFor="comment" className="block text-refined text-xs md:text-sm">
+              Message pour les mariés (optionnel)
+            </label>
+            <textarea
+              name="comment"
+              rows={3}
+              className="w-full bg-[rgba(255,255,255,0.05)] backdrop-blur-sm border border-[var(--accent)]/20 rounded-lg p-2.5 text-refined text-xs md:text-sm focus:outline-none focus:border-[var(--accent)]/40 transition-colors"
+              onChange={handleChange}
+            />
+          </div>
 
-  <button
-    type="submit"
-    className="w-full bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.2)] border border-[var(--accent)]/20 text-accent py-2.5 px-5 rounded-lg transition-all duration-300 text-xs md:text-sm hover:border-[var(--accent)]/40"
-  >
-    Envoyer ma réponse
-  </button>
-</form>
-
+          <button
+            type="submit"
+            className="w-full bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.2)] border border-[var(--accent)]/20 text-accent py-2.5 px-5 rounded-lg transition-all duration-300 text-xs md:text-sm hover:border-[var(--accent)]/40"
+          >
+            Envoyer ma réponse
+          </button>
+        </form>
       )}
     </div>
   );
