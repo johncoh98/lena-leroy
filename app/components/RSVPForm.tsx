@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import React from 'react';
 
-const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbx4MeA-pZRZqnJcwKWIL-OpuzVISTlvfy-Ds2rinHpQ-xME_t9jnotw2QVxakhwZhnlMA/exec';
+const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbzrPPSzsmLUoc71rZFfFUjDyiQ_znnFfZ2yl8qD4OMhS2ewdaIwh8eaamUqTELEQD6gXQ/exec';
 
 type FormFields = {
   fullName: string;
