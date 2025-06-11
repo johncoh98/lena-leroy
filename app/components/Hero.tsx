@@ -98,7 +98,7 @@ export default function Hero() {
                    Google Maps
                 </motion.a>
                 <motion.a
-                  href="https://waze.com/ul?ll=48.8849,2.3812&navigate=yes"
+                  href="https://waze.com/ul?ll=48.882951902002894,2.3819851847504236&navigate=yes"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[var(--button-bg)] text-white px-3 md:px-6 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium shadow-md flex items-center justify-center gap-2 hover:bg-[var(--button-bg)]/90 transition-colors"

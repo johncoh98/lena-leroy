@@ -123,7 +123,7 @@ export default function WeddingCard() {
           <strong className="text-accent">Jeudi 4 septembre 2025</strong> à 17h00
         </p>
         <p>Salle Le White</p>
-        <p>10 Rue de la Croix Rouge, 93330 Neuilly-sur-Marne</p>
+        <p>68 Rue Louis Ampère, 93330 Neuilly-sur-Marne</p>
       </motion.div>
 
       {/* Carte */}
@@ -135,7 +135,7 @@ export default function WeddingCard() {
           className="w-full h-full"
           loading="lazy"
           allowFullScreen
-          src="https://www.google.com/maps?q=10+Rue+de+la+Croix+Rouge+93330+Neuilly-sur-Marne&z=15&output=embed"
+          src="https://www.google.com/maps?q=68+Rue+Louis+Ampère+93330+Neuilly-sur-Marne&z=15&output=embed"
         />
       </motion.div>
 
@@ -145,7 +145,7 @@ export default function WeddingCard() {
         className="flex flex-col sm:flex-row justify-center gap-3"
       >
         <motion.a
-          href="https://www.google.com/maps?q=10+Rue+de+la+Croix+Rouge+93330+Neuilly-sur-Marne"
+          href="https://www.google.com/maps?q=68+Rue+Louis+Ampère+93330+Neuilly-sur-Marne"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[var(--accent)] text-black px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-[var(--accent)]/90"
@@ -156,7 +156,7 @@ export default function WeddingCard() {
         </motion.a>
 
         <motion.a
-          href="https://waze.com/ul?ll=48.8498,2.5275&navigate=yes"
+          href="https://waze.com/ul?ll=48.868602846833525,2.5195457448704777&navigate=yes" 
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[var(--button-bg)] text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:bg-[var(--button-bg)]/90"
