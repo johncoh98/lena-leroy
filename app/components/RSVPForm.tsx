@@ -130,12 +130,6 @@ export default function RSVPForm() {
         <span className="text-accent">C</span>onfirme ta présence
       </h2>
       
-      <div className="bg-[rgba(212,175,55,0.1)] border border-[var(--accent)]/20 rounded-lg p-4 mb-6 text-center">
-        <p className="text-[var(--accent)] text-xs md:text-sm">
-          ⚠️ <strong>Important :</strong> Formulaire optimisé pour tous les navigateurs (Chrome, Firefox, Safari, Edge). 
-          En cas de problème, contactez directement les mariés. Votre participation nous tient à cœur !
-        </p>
-      </div>
 
 
 
