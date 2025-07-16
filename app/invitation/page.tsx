@@ -7,7 +7,6 @@ import DecorativeDivider from '../components/DecorativeDivider';
 import MainAudioPlayer from '../components/MainAudioPlayer';
 import WeddingLocation from '../components/WeddingLocation';
 import { useEffect } from 'react';
-import Hero from '../components/Hero';
 
 
 
@@ -46,7 +45,7 @@ export default function InvitationPage() {
       <div className="py-12 px-4 md:px-10 space-y-20">
         <ScrollingMotifs />
         
-                  <Hero />
+
 
 
         <motion.div

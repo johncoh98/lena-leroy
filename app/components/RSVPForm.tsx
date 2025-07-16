@@ -9,11 +9,8 @@ type FormFields = {
   fullName: string;
   presenceSoiree: string;
   guestsSoiree: string;
-  presenceMairie: string;
-  guestsMairie: string;
   comment: string;
   additionalGuestsSoiree: string[];
-  additionalGuestsMairie: string[];
 };
 
 export default function RSVPForm() {
@@ -21,16 +18,13 @@ export default function RSVPForm() {
     fullName: '',
     presenceSoiree: '',
     guestsSoiree: '',
-    presenceMairie: '',
-    guestsMairie: '',
     comment: '',
     additionalGuestsSoiree: [],
-    additionalGuestsMairie: [],
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -44,13 +38,6 @@ export default function RSVPForm() {
         [name]: value,
         additionalGuestsSoiree: Array(Math.max(0, guestsCount - 1)).fill('')
       }));
-    } else if (name === 'guestsMairie') {
-      const guestsCount = parseInt(value) || 0;
-      setForm(prev => ({
-        ...prev,
-        [name]: value,
-        additionalGuestsMairie: Array(Math.max(0, guestsCount - 1)).fill('')
-      }));
     } else {
       setForm(prev => ({ ...prev, [name]: value }));
     }
@@ -58,53 +45,99 @@ export default function RSVPForm() {
 
   const handleAdditionalGuestChange = (
     event: ChangeEvent<HTMLInputElement>,
-    index: number,
-    type: 'soiree' | 'mairie'
+    index: number
   ) => {
     const { value } = event.target;
     setForm(prev => ({
       ...prev,
-      [type === 'soiree' ? 'additionalGuestsSoiree' : 'additionalGuestsMairie']: prev[type === 'soiree' ? 'additionalGuestsSoiree' : 'additionalGuestsMairie'].map(
+      additionalGuestsSoiree: prev.additionalGuestsSoiree.map(
         (guest, i) => (i === index ? value : guest)
       ),
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (formRef.current) {
-      // Clear old hidden fields
-      [...formRef.current.querySelectorAll('input[type="hidden"]')].forEach(el => el.remove());
+    
+    // Validation côté client
+    if (!form.fullName.trim()) {
+      alert('Veuillez remplir votre nom et prénom');
+      return;
+    }
+    
+    if (!form.presenceSoiree) {
+      alert('Veuillez indiquer si vous viendrez à la soirée');
+      return;
+    }
 
-      // Add hidden inputs for additional guests
-      form.additionalGuestsMairie.forEach((guest, index) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = `additionalGuestMairie${index + 1}`;
-        input.value = guest;
-        formRef.current?.appendChild(input);
-      });
+    if (form.presenceSoiree.toLowerCase() !== 'non, avec regrets' && !form.guestsSoiree) {
+      alert('Veuillez indiquer combien vous serez pour la soirée');
+      return;
+    }
 
+    // Log pour debugger
+    console.log('📝 Données du formulaire:', form);
+    console.log('🔍 Navigateur détecté:', navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Autre');
+    
+    setIsSubmitting(true);
+    setSubmitError(false);
+
+    try {
+      // Préparer les données FormData pour Google Apps Script
+      const formData = new FormData();
+      formData.append('fullName', form.fullName.trim());
+      formData.append('presenceSoiree', form.presenceSoiree);
+      formData.append('guestsSoiree', form.guestsSoiree);
+      formData.append('comment', form.comment);
+      
+      // Ajouter les invités supplémentaires
       form.additionalGuestsSoiree.forEach((guest, index) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = `additionalGuestSoiree${index + 1}`;
-        input.value = guest;
-        formRef.current?.appendChild(input);
+        if (guest.trim()) {
+          formData.append(`additionalGuestSoiree${index + 1}`, guest.trim());
+        }
+      });
+      
+      // Ajouter timestamp pour traçabilité
+      formData.append('timestamp', new Date().toISOString());
+      formData.append('browser', navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent);
+
+      console.log('📤 Envoi du formulaire vers:', GOOGLE_FORM_URL);
+
+      // Utiliser fetch au lieu de iframe pour une meilleure compatibilité
+      await fetch(GOOGLE_FORM_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Important pour Google Apps Script
+        body: formData
       });
 
-      formRef.current.submit();
+      console.log('✅ Réponse reçue, formulaire probablement envoyé avec succès');
+      
+      // Avec mode no-cors, on ne peut pas vérifier le statut de réponse
+      // mais l'absence d'erreur indique généralement un succès
+      setIsSubmitting(false);
       setSubmitted(true);
+
+    } catch (error) {
+      console.error('❌ Erreur lors de l\'envoi du formulaire:', error);
+      setIsSubmitting(false);
+      setSubmitError(true);
     }
   };
 
   return (
     <div className="invitation-container p-6 md:p-12 rounded-lg max-w-3xl mx-auto">
-      <h2 className="title-royal text-lg md:text-xl lg:text-2xl text-center mb-8 md:mb-10">
+      <h2 className="title-royal text-lg md:text-xl lg:text-2xl text-center mb-6 md:mb-8">
         <span className="text-accent">C</span>onfirme ta présence
       </h2>
+      
+      <div className="bg-[rgba(212,175,55,0.1)] border border-[var(--accent)]/20 rounded-lg p-4 mb-6 text-center">
+        <p className="text-[var(--accent)] text-xs md:text-sm">
+          ⚠️ <strong>Important :</strong> Formulaire optimisé pour tous les navigateurs (Chrome, Firefox, Safari, Edge). 
+          En cas de problème, contactez directement les mariés. Votre participation nous tient à cœur !
+        </p>
+      </div>
 
-      <iframe name="hidden_iframe" ref={iframeRef} style={{ display: 'none' }} />
+
 
       {submitted ? (
         <div className="text-center space-y-4">
@@ -113,12 +146,20 @@ export default function RSVPForm() {
           </p>
           <p className="text-accent text-base">✦</p>
         </div>
+      ) : submitError ? (
+        <div className="text-center space-y-4">
+          <p className="text-red-400 text-base md:text-lg">
+            Erreur lors de l&apos;envoi. Veuillez réessayer.
+          </p>
+          <button
+            onClick={() => setSubmitError(false)}
+            className="text-accent underline text-sm"
+          >
+            Réessayer
+          </button>
+        </div>
       ) : (
         <form
-          ref={formRef}
-          action={GOOGLE_FORM_URL}
-          method="POST"
-          target="hidden_iframe"
           onSubmit={handleSubmit}
           className="space-y-4 md:space-y-6"
         >
@@ -128,35 +169,6 @@ export default function RSVPForm() {
             required
             onChange={handleChange}
           />
-
-          <SelectInput
-            label="Viendras-tu à la mairie ?"
-            name="presenceMairie"
-            required
-            options={['Oui', 'Non, avec regrets', 'Pas encore sûr']}
-            onChange={handleChange}
-          />
-          {form.presenceMairie.toLowerCase() !== 'non, avec regrets' && (
-            <>
-              <TextInput
-                label="Combien serez-vous pour la mairie ?"
-                name="guestsMairie"
-                type="number"
-                min="1"
-                required
-                onChange={handleChange}
-              />
-              {form.additionalGuestsMairie.map((_, index) => (
-                <TextInput
-                  key={`mairie-guest-${index}`}
-                  label={`Nom & Prénom de l'invité ${index + 2}`}
-                  name={`additionalGuestMairie${index + 1}`}
-                  required
-                  onChange={(e) => handleAdditionalGuestChange(e, index, 'mairie')}
-                />
-              ))}
-            </>
-          )}
 
           <SelectInput
             label="Viendras-tu à la soirée ?"
@@ -181,7 +193,7 @@ export default function RSVPForm() {
                   label={`Nom & Prénom de l'invité ${index + 2}`}
                   name={`additionalGuestSoiree${index + 1}`}
                   required
-                  onChange={(e) => handleAdditionalGuestChange(e, index, 'soiree')}
+                  onChange={(e) => handleAdditionalGuestChange(e, index)}
                 />
               ))}
             </>
@@ -201,9 +213,14 @@ export default function RSVPForm() {
 
           <button
             type="submit"
-            className="w-full bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.2)] border border-[var(--accent)]/20 text-accent py-2.5 px-5 rounded-lg transition-all duration-300 text-xs md:text-sm hover:border-[var(--accent)]/40"
+            disabled={isSubmitting}
+            className={`w-full py-2.5 px-5 rounded-lg transition-all duration-300 text-xs md:text-sm ${
+              isSubmitting 
+                ? 'bg-gray-500/20 text-gray-400 cursor-not-allowed' 
+                : 'bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.2)] border border-[var(--accent)]/20 text-accent hover:border-[var(--accent)]/40'
+            }`}
           >
-            Envoyer ma réponse
+            {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma réponse'}
           </button>
         </form>
       )}
