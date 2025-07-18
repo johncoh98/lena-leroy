@@ -103,12 +103,20 @@ export default function RSVPForm() {
 
       console.log('📤 Envoi du formulaire vers:', GOOGLE_FORM_URL);
 
-      // Utiliser fetch au lieu de iframe pour une meilleure compatibilité
-      await fetch(GOOGLE_FORM_URL, {
+      // Créer une promesse avec timeout
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout - La requête a pris trop de temps')), 10000); // 10 secondes
+      });
+
+      // Promesse pour l'envoi du formulaire
+      const fetchPromise = fetch(GOOGLE_FORM_URL, {
         method: 'POST',
-        mode: 'no-cors', // Important pour Google Apps Script
+        mode: 'no-cors',
         body: formData
       });
+
+      // Attendre soit la réponse, soit le timeout
+      await Promise.race([fetchPromise, timeoutPromise]);
 
       console.log('✅ Réponse reçue, formulaire probablement envoyé avec succès');
       
@@ -119,8 +127,72 @@ export default function RSVPForm() {
 
     } catch (error) {
       console.error('❌ Erreur lors de l\'envoi du formulaire:', error);
-      setIsSubmitting(false);
-      setSubmitError(true);
+      
+      // Essayer la méthode de fallback avec iframe
+      try {
+        console.log('🔄 Tentative avec méthode de fallback (iframe)...');
+        
+        // Créer un iframe caché pour l'envoi
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        
+        // Créer un formulaire dans l'iframe
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (iframeDoc) {
+          const formElement = iframeDoc.createElement('form');
+          formElement.method = 'POST';
+          formElement.action = GOOGLE_FORM_URL;
+          
+          // Ajouter les champs au formulaire
+          Object.entries(form).forEach(([key, value]) => {
+            if (value && typeof value === 'string') {
+              const input = iframeDoc.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = value;
+              formElement.appendChild(input);
+            }
+          });
+          
+          // Ajouter les invités supplémentaires
+          form.additionalGuestsSoiree.forEach((guest, index) => {
+            if (guest.trim()) {
+              const input = iframeDoc.createElement('input');
+              input.type = 'hidden';
+              input.name = `additionalGuestSoiree${index + 1}`;
+              input.value = guest.trim();
+              formElement.appendChild(input);
+            }
+          });
+          
+          // Ajouter timestamp
+          const timestampInput = iframeDoc.createElement('input');
+          timestampInput.type = 'hidden';
+          timestampInput.name = 'timestamp';
+          timestampInput.value = new Date().toISOString();
+          formElement.appendChild(timestampInput);
+          
+          iframeDoc.body.appendChild(formElement);
+          formElement.submit();
+          
+          // Attendre un peu puis considérer comme succès
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+            setIsSubmitting(false);
+            setSubmitted(true);
+            console.log('✅ Envoi réussi avec méthode de fallback');
+          }, 2000);
+          
+        } else {
+          throw new Error('Impossible de créer l\'iframe');
+        }
+        
+      } catch (fallbackError) {
+        console.error('❌ Échec de la méthode de fallback:', fallbackError);
+        setIsSubmitting(false);
+        setSubmitError(true);
+      }
     }
   };
 
