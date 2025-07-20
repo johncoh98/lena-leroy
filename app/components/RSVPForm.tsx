@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import React from 'react';
 
-const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbwakaXTTyNChWn2TY4NOv3WS72wSqfYpBXLRsE_63VXnaYZU6RWvqT9h8E292pNLt5crg/exec';
+const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbw4LSoPCP-EN9lXOa6VQfWnZRd4ASZklzDvz3jb1pOR8g1zYFtyeedu7M9YwaCi6IUV/exec/exec';
 
 type FormFields = {
   fullName: string;
@@ -83,7 +83,9 @@ export default function RSVPForm() {
     setSubmitError(false);
 
     try {
-      // Préparer les données FormData pour Google Apps Script
+      // Méthode 1: Essayer avec fetch en mode cors
+      console.log('📤 Tentative avec fetch (mode cors)...');
+      
       const formData = new FormData();
       formData.append('fullName', form.fullName.trim());
       formData.append('presenceSoiree', form.presenceSoiree);
@@ -101,97 +103,134 @@ export default function RSVPForm() {
       formData.append('timestamp', new Date().toISOString());
       formData.append('browser', navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent);
 
-      console.log('📤 Envoi du formulaire vers:', GOOGLE_FORM_URL);
-
-      // Créer une promesse avec timeout
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout - La requête a pris trop de temps')), 10000); // 10 secondes
-      });
-
-      // Promesse pour l'envoi du formulaire
-      const fetchPromise = fetch(GOOGLE_FORM_URL, {
+      const response = await fetch(GOOGLE_FORM_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         body: formData
       });
 
-      // Attendre soit la réponse, soit le timeout
-      await Promise.race([fetchPromise, timeoutPromise]);
-
-      console.log('✅ Réponse reçue, formulaire probablement envoyé avec succès');
-      
-      // Avec mode no-cors, on ne peut pas vérifier le statut de réponse
-      // mais l'absence d'erreur indique généralement un succès
-      setIsSubmitting(false);
-      setSubmitted(true);
+      if (response.ok) {
+        console.log('✅ Réponse reçue avec succès');
+        setIsSubmitting(false);
+        setSubmitted(true);
+        return;
+      } else {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
 
     } catch (error) {
-      console.error('❌ Erreur lors de l\'envoi du formulaire:', error);
+      console.error('❌ Erreur avec fetch:', error);
       
-      // Essayer la méthode de fallback avec iframe
+      // Méthode 2: Essayer avec XMLHttpRequest
       try {
-        console.log('🔄 Tentative avec méthode de fallback (iframe)...');
+        console.log('🔄 Tentative avec XMLHttpRequest...');
         
-        // Créer un iframe caché pour l'envoi
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', GOOGLE_FORM_URL, true);
         
-        // Créer un formulaire dans l'iframe
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (iframeDoc) {
-          const formElement = iframeDoc.createElement('form');
-          formElement.method = 'POST';
-          formElement.action = GOOGLE_FORM_URL;
-          
-          // Ajouter les champs au formulaire
-          Object.entries(form).forEach(([key, value]) => {
-            if (value && typeof value === 'string') {
-              const input = iframeDoc.createElement('input');
-              input.type = 'hidden';
-              input.name = key;
-              input.value = value;
-              formElement.appendChild(input);
-            }
-          });
-          
-          // Ajouter les invités supplémentaires
-          form.additionalGuestsSoiree.forEach((guest, index) => {
-            if (guest.trim()) {
-              const input = iframeDoc.createElement('input');
-              input.type = 'hidden';
-              input.name = `additionalGuestSoiree${index + 1}`;
-              input.value = guest.trim();
-              formElement.appendChild(input);
-            }
-          });
-          
-          // Ajouter timestamp
-          const timestampInput = iframeDoc.createElement('input');
-          timestampInput.type = 'hidden';
-          timestampInput.name = 'timestamp';
-          timestampInput.value = new Date().toISOString();
-          formElement.appendChild(timestampInput);
-          
-          iframeDoc.body.appendChild(formElement);
-          formElement.submit();
-          
-          // Attendre un peu puis considérer comme succès
-          setTimeout(() => {
-            document.body.removeChild(iframe);
+        const formData = new FormData();
+        formData.append('fullName', form.fullName.trim());
+        formData.append('presenceSoiree', form.presenceSoiree);
+        formData.append('guestsSoiree', form.guestsSoiree);
+        formData.append('comment', form.comment);
+        
+        // Ajouter les invités supplémentaires
+        form.additionalGuestsSoiree.forEach((guest, index) => {
+          if (guest.trim()) {
+            formData.append(`additionalGuestSoiree${index + 1}`, guest.trim());
+          }
+        });
+        
+        // Ajouter timestamp pour traçabilité
+        formData.append('timestamp', new Date().toISOString());
+        formData.append('browser', navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent);
+
+        xhr.onload = function() {
+          if (xhr.status === 200 || xhr.status === 0) {
+            console.log('✅ Envoi réussi avec XMLHttpRequest');
             setIsSubmitting(false);
             setSubmitted(true);
-            console.log('✅ Envoi réussi avec méthode de fallback');
-          }, 2000);
-          
-        } else {
-          throw new Error('Impossible de créer l\'iframe');
-        }
+          } else {
+            throw new Error(`Erreur XMLHttpRequest: ${xhr.status}`);
+          }
+        };
         
-      } catch (fallbackError) {
-        console.error('❌ Échec de la méthode de fallback:', fallbackError);
-        setIsSubmitting(false);
-        setSubmitError(true);
+        xhr.onerror = function() {
+          throw new Error('Erreur réseau XMLHttpRequest');
+        };
+        
+        xhr.send(formData);
+        
+      } catch (xhrError) {
+        console.error('❌ Erreur avec XMLHttpRequest:', xhrError);
+        
+        // Méthode 3: Fallback avec iframe
+        try {
+          console.log('🔄 Tentative avec méthode de fallback (iframe)...');
+          
+          // Créer un iframe caché pour l'envoi
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+          
+          // Créer un formulaire dans l'iframe
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (iframeDoc) {
+            const formElement = iframeDoc.createElement('form');
+            formElement.method = 'POST';
+            formElement.action = GOOGLE_FORM_URL;
+            
+            // Ajouter les champs au formulaire
+            const formFields = {
+              fullName: form.fullName.trim(),
+              presenceSoiree: form.presenceSoiree,
+              guestsSoiree: form.guestsSoiree,
+              comment: form.comment,
+              timestamp: new Date().toISOString(),
+              browser: navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent
+            };
+            
+            Object.entries(formFields).forEach(([key, value]) => {
+              if (value) {
+                const input = iframeDoc.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                formElement.appendChild(input);
+              }
+            });
+            
+            // Ajouter les invités supplémentaires
+            form.additionalGuestsSoiree.forEach((guest, index) => {
+              if (guest.trim()) {
+                const input = iframeDoc.createElement('input');
+                input.type = 'hidden';
+                input.name = `additionalGuestSoiree${index + 1}`;
+                input.value = guest.trim();
+                formElement.appendChild(input);
+              }
+            });
+            
+            iframeDoc.body.appendChild(formElement);
+            formElement.submit();
+            
+            // Attendre un peu puis considérer comme succès
+            setTimeout(() => {
+              document.body.removeChild(iframe);
+              setIsSubmitting(false);
+              setSubmitted(true);
+              console.log('✅ Envoi réussi avec méthode de fallback');
+            }, 2000);
+            
+          } else {
+            throw new Error('Impossible de créer l\'iframe');
+          }
+          
+        } catch (fallbackError) {
+          console.error('❌ Échec de la méthode de fallback:', fallbackError);
+          setIsSubmitting(false);
+          setSubmitError(true);
+        }
       }
     }
   };
