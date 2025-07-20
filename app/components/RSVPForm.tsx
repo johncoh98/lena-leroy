@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import React from 'react';
 
-const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbw4LSoPCP-EN9lXOa6VQfWnZRd4ASZklzDvz3jb1pOR8g1zYFtyeedu7M9YwaCi6IUV/exec/exec';
+const GOOGLE_FORM_URL = 'https://script.google.com/macros/s/AKfycbw4LSoPCP-EN9lXOa6VQfWnZRd4ASZklzDvz3jb1pOR8g1zYFtyeedu7M9YwaCi6IUV/exec';
 
 type FormFields = {
   fullName: string;
@@ -83,8 +83,7 @@ export default function RSVPForm() {
     setSubmitError(false);
 
     try {
-      // Méthode 1: Essayer avec fetch en mode cors
-      console.log('📤 Tentative avec fetch (mode cors)...');
+      console.log('📤 Envoi du formulaire...');
       
       const formData = new FormData();
       formData.append('fullName', form.fullName.trim());
@@ -103,135 +102,80 @@ export default function RSVPForm() {
       formData.append('timestamp', new Date().toISOString());
       formData.append('browser', navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent);
 
-      const response = await fetch(GOOGLE_FORM_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: formData
-      });
-
-      if (response.ok) {
-        console.log('✅ Réponse reçue avec succès');
-        setIsSubmitting(false);
-        setSubmitted(true);
-        return;
-      } else {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-
-    } catch (error) {
-      console.error('❌ Erreur avec fetch:', error);
-      
-      // Méthode 2: Essayer avec XMLHttpRequest
+      // Essayer d'abord avec fetch
       try {
-        console.log('🔄 Tentative avec XMLHttpRequest...');
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', GOOGLE_FORM_URL, true);
-        
-        const formData = new FormData();
-        formData.append('fullName', form.fullName.trim());
-        formData.append('presenceSoiree', form.presenceSoiree);
-        formData.append('guestsSoiree', form.guestsSoiree);
-        formData.append('comment', form.comment);
-        
-        // Ajouter les invités supplémentaires
-        form.additionalGuestsSoiree.forEach((guest, index) => {
-          if (guest.trim()) {
-            formData.append(`additionalGuestSoiree${index + 1}`, guest.trim());
-          }
+        await fetch(GOOGLE_FORM_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
         });
         
-        // Ajouter timestamp pour traçabilité
-        formData.append('timestamp', new Date().toISOString());
-        formData.append('browser', navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent);
-
-        xhr.onload = function() {
-          if (xhr.status === 200 || xhr.status === 0) {
-            console.log('✅ Envoi réussi avec XMLHttpRequest');
+        console.log('✅ Envoi réussi avec fetch');
+        setIsSubmitting(false);
+        setSubmitted(true);
+        
+      } catch {
+        console.log('❌ Erreur fetch, tentative avec iframe...');
+        
+        // Fallback avec iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (iframeDoc) {
+          const formElement = iframeDoc.createElement('form');
+          formElement.method = 'POST';
+          formElement.action = GOOGLE_FORM_URL;
+          
+          // Ajouter tous les champs
+          Object.entries({
+            fullName: form.fullName.trim(),
+            presenceSoiree: form.presenceSoiree,
+            guestsSoiree: form.guestsSoiree,
+            comment: form.comment,
+            timestamp: new Date().toISOString(),
+            browser: navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent
+          }).forEach(([key, value]) => {
+            if (value) {
+              const input = iframeDoc.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = value;
+              formElement.appendChild(input);
+            }
+          });
+          
+          // Ajouter les invités supplémentaires
+          form.additionalGuestsSoiree.forEach((guest, index) => {
+            if (guest.trim()) {
+              const input = iframeDoc.createElement('input');
+              input.type = 'hidden';
+              input.name = `additionalGuestSoiree${index + 1}`;
+              input.value = guest.trim();
+              formElement.appendChild(input);
+            }
+          });
+          
+          iframeDoc.body.appendChild(formElement);
+          formElement.submit();
+          
+          setTimeout(() => {
+            document.body.removeChild(iframe);
             setIsSubmitting(false);
             setSubmitted(true);
-          } else {
-            throw new Error(`Erreur XMLHttpRequest: ${xhr.status}`);
-          }
-        };
-        
-        xhr.onerror = function() {
-          throw new Error('Erreur réseau XMLHttpRequest');
-        };
-        
-        xhr.send(formData);
-        
-      } catch (xhrError) {
-        console.error('❌ Erreur avec XMLHttpRequest:', xhrError);
-        
-        // Méthode 3: Fallback avec iframe
-        try {
-          console.log('🔄 Tentative avec méthode de fallback (iframe)...');
+            console.log('✅ Envoi réussi avec iframe');
+          }, 1500);
           
-          // Créer un iframe caché pour l'envoi
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          document.body.appendChild(iframe);
-          
-          // Créer un formulaire dans l'iframe
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-          if (iframeDoc) {
-            const formElement = iframeDoc.createElement('form');
-            formElement.method = 'POST';
-            formElement.action = GOOGLE_FORM_URL;
-            
-            // Ajouter les champs au formulaire
-            const formFields = {
-              fullName: form.fullName.trim(),
-              presenceSoiree: form.presenceSoiree,
-              guestsSoiree: form.guestsSoiree,
-              comment: form.comment,
-              timestamp: new Date().toISOString(),
-              browser: navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent
-            };
-            
-            Object.entries(formFields).forEach(([key, value]) => {
-              if (value) {
-                const input = iframeDoc.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                formElement.appendChild(input);
-              }
-            });
-            
-            // Ajouter les invités supplémentaires
-            form.additionalGuestsSoiree.forEach((guest, index) => {
-              if (guest.trim()) {
-                const input = iframeDoc.createElement('input');
-                input.type = 'hidden';
-                input.name = `additionalGuestSoiree${index + 1}`;
-                input.value = guest.trim();
-                formElement.appendChild(input);
-              }
-            });
-            
-            iframeDoc.body.appendChild(formElement);
-            formElement.submit();
-            
-            // Attendre un peu puis considérer comme succès
-            setTimeout(() => {
-              document.body.removeChild(iframe);
-              setIsSubmitting(false);
-              setSubmitted(true);
-              console.log('✅ Envoi réussi avec méthode de fallback');
-            }, 2000);
-            
-          } else {
-            throw new Error('Impossible de créer l\'iframe');
-          }
-          
-        } catch (fallbackError) {
-          console.error('❌ Échec de la méthode de fallback:', fallbackError);
-          setIsSubmitting(false);
-          setSubmitError(true);
+        } else {
+          throw new Error('Impossible de créer l\'iframe');
         }
       }
+      
+    } catch (error) {
+      console.error('❌ Erreur finale:', error);
+      setIsSubmitting(false);
+      setSubmitError(true);
     }
   };
 
