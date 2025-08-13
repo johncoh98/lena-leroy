@@ -1,7 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
 import Countdown from '../components/Countdown';
-import RSVPForm from '../components/RSVPForm';
 import ScrollingMotifs from '../components/ScrollingMotifs';
 import DecorativeDivider from '../components/DecorativeDivider';
 import MainAudioPlayer from '../components/MainAudioPlayer';
@@ -95,14 +94,6 @@ export default function InvitationPage() {
           <DecorativeDivider />
         </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-20%" }}
-          transition={defaultTransition}
-        >
-          <RSVPForm />
-        </motion.div>
 
         <motion.footer 
           initial={{ opacity: 0 }}
